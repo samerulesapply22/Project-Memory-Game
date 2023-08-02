@@ -1,8 +1,12 @@
-import { useState } from "react";
-import "./App.css";
+import Cards from "./components/cards";
 
 function App() {
-  return <h1>Salut le monde</h1>;
+  return (
+    <div id="app">
+      <h1>Jeu de mémoire</h1>
+      <Cards />
+    </div>
+  );
 }
 
 export default App;
