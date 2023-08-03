@@ -10,12 +10,29 @@ body {
   display: flex;
   justify-content: center;
   background-color: whitesmoke;
+  align-items: center;
 }
 
-h1 {
+h1, h2 {
   text-align: center;
   margin-bottom: 1em;
   margin-top: 1.5em;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#newGame {
+  padding: 30px 75px;
+  background-color: darkred;
+  color: whitesmoke;
+  border-radius: 10px;
+  border: 1px solid darkred;
+  font-size: 1em;
+  cursor: pointer;
 }
 
 #container {
