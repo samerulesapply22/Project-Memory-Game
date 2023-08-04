@@ -26,12 +26,31 @@ const cardsArray = [
   { id: 14, img: "src/components/assets/twoStars.png", status: "back" },
   { id: 15, img: "src/components/assets/yellowStar.png", status: "back" },
   { id: 16, img: "src/components/assets/yellowStar.png", status: "back" },
-]; //.sort(() => Math.random() - 0.5);
+];
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+const shuffled = shuffle(cardsArray);
 
 export default function Cards() {
   const [prev, setPrev] = useState(false);
-  const [deck, setDeck] = useState(cardsArray);
-  //const [isGame, setIsGame] = useState("yes");
+  const [deck, setDeck] = useState(shuffled);
+
+  function newStatus(status, ...cards) {
+    cards.forEach((card) => (card.status = status));
+    setDeck([...deck]);
+  }
+
+  function handleClick(card) {
+    if (card.status === "back") {
+      newStatus("active", card);
+      match(card);
+    }
+  }
 
   function match(card) {
     if (!prev) {
@@ -51,51 +70,9 @@ export default function Cards() {
     }
   }
 
-  function handleClick(card) {
-    if (card.status === "back") {
-      newStatus("active", card);
-      match(card);
-    }
-  }
-
-  function newStatus(status, ...cards) {
-    cards.forEach((card) => (card.status = status));
-    setDeck([...deck]);
-  }
-
-  const cardsArrayDisplay = cardsArray.map((card, index) => {
+  return shuffled.map((card, index) => {
     return (
       <Card key={index} card={card} handleClick={() => handleClick(card)} />
     );
   });
-
-  //const game = () => {
-  //setIsGame("yes");
-  //};
-
-  //if (isGame == "yes")
-  return (
-    <>
-      <h1>Jeu de mémoire</h1>
-      <div id="container">{cardsArrayDisplay}</div>
-    </>
-  );
-  /*else if (isGame === "no")
-    return (
-      <div class="game">
-        <h1>Jeu de mémoire</h1>
-        <button id="newGame" onClick={game}>
-          Nouveau Jeu
-        </button>
-      </div>
-    );
-  else if (isGame === "over")
-    return (
-      <div class="game">
-        <h2>Fin du jeu. Vous gagnez!</h2>
-        <button id="newGame" onClick={game}>
-          Nouveau Jeu
-        </button>
-      </div>
-    ); */
 }

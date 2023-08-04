@@ -1,7 +1,8 @@
-import Cards from "./components/cards";
+import Game from "./components/game";
+
 function App() {
   return (
-    <Cards />
+    <Game />
   );
 }
 
