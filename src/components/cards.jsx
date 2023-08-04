@@ -1,6 +1,4 @@
 import { useState } from "react";
-import Card from "./card";
-import Timer from "./timer";
 
 export default function Cards() {
   const cardsArray = [
@@ -32,6 +30,7 @@ export default function Cards() {
   const [prev, setPrev] = useState(false);
   const [deck, setDeck] = useState(shuffle(cardsArray));
   const [flips, setFlips] = useState(0);
+  const [points, setPoints] = useState(0);
 
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -58,51 +57,58 @@ export default function Cards() {
       return;
     }
     if (card.id !== prev.id) {
+      setFlips(flips + 1);
       if (card.img === prev.img) {
         newStatus("correct", prev, card);
-        setFlips(flips + 1);
+        setPoints(points + 100);
       } else {
         newStatus("incorrect", prev, card);
         setTimeout(() => {
           newStatus("back", prev, card);
-        }, 600);
+        }, 800);
       }
       setPrev(false);
     }
   }
 
-  const cardsx = deck.map((card, index) => {
+  function Placeholder() {
+    if (deck.every((card) => card.status === "correct"))
+      return <h1>Гра закінчена!</h1>;
+    else return <h1>Балів: {points}</h1>;
+  }
+
+  const cards = deck.map((card, index) => {
     return (
-      <Card key={index} card={card} handleClick={() => handleClick(card)} />
+      <div
+        key={index}
+        className={"card " + card.status}
+        onClick={() => handleClick(card)}
+      >
+        <img src={card.img} />
+      </div>
     );
   });
 
-  function Placeholder() {
-    if (deck.every((card) => card.status === "correct"))
-      return <h1>Game over!</h1>;
-    else return <Timer />;
-  }
-
   return (
     <>
-      <h1 id='title'>Memory game</h1>
+      <h1 id="title">Гра в пам'ять</h1>
       <div id="header">
         <Placeholder />
         <div id="gameInfo">
-          <div id="flips">
-            {flips} / {deck.length / 2}
-          </div>
+          <div id="flips">Ходів: {flips}</div>
           <button
             className="btnNewGame"
             onClick={() => {
-              window.location.reload(false);
+              setDeck(shuffle(cardsArray));
+              setFlips(0);
+              setPoints(0);
             }}
           >
-            New Game
-          </button>{" "}
+            Нова гра
+          </button>
         </div>
       </div>
-      <div id="container">{cardsx}</div>
+      <div id="container">{cards}</div>
     </>
   );
 }
