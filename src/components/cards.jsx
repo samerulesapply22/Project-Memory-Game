@@ -30,6 +30,7 @@ export default function Cards() {
   ];
   const [prev, setPrev] = useState(false);
   const [deck, setDeck] = useState(shuffle(cardsArray));
+  const [flips, setFlips] = useState(0);
 
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -58,6 +59,7 @@ export default function Cards() {
     if (card.id !== prev.id) {
       if (card.img === prev.img) {
         newStatus("correct", prev, card);
+        setFlips(flips + 1);
       } else {
         newStatus("incorrect", prev, card);
         setTimeout(() => {
@@ -68,9 +70,31 @@ export default function Cards() {
     }
   }
 
-  return deck.map((card, index) => {
+  const cardsx = deck.map((card, index) => {
     return (
       <Card key={index} card={card} handleClick={() => handleClick(card)} />
     );
   });
+
+  return (
+    <>
+      <h1>Memory game</h1>
+      <div id="header">
+        <div id="gameInfo">
+          <div id="flips">
+            {flips} / {deck.length / 2}
+          </div>
+          <button
+            className="btnNewGame"
+            onClick={() => {
+              window.location.reload(false);
+            }}
+          >
+            New Game
+          </button>{" "}
+        </div>
+      </div>
+      <div id="container">{cardsx}</div>
+    </>
+  );
 }
