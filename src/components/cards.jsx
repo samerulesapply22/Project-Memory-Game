@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Card from "./card";
+import Timer from "./timer";
 
 export default function Cards() {
   const cardsArray = [
@@ -76,10 +77,17 @@ export default function Cards() {
     );
   });
 
+  function Placeholder() {
+    if (deck.every((card) => card.status === "correct"))
+      return <h1>Game over!</h1>;
+    else return <Timer />;
+  }
+
   return (
     <>
-      <h1>Memory game</h1>
+      <h1 id='title'>Memory game</h1>
       <div id="header">
+        <Placeholder />
         <div id="gameInfo">
           <div id="flips">
             {flips} / {deck.length / 2}
