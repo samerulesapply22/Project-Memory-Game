@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Cards() {
   const cardsArray = [
@@ -32,6 +32,7 @@ export default function Cards() {
   const [deck, setDeck] = useState(shuffle(cardsArray));
   const [flips, setFlips] = useState(0);
   const [points, setPoints] = useState(0);
+  const [seconds, setSeconds] = useState(0);
 
   function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -76,11 +77,25 @@ export default function Cards() {
     if (deck.every((card) => card.status === "correct")) {
       return (
         <>
+          <style>
+            {
+              ".btnNewGame { border-color: rgb(242, 231, 78); } body { background-color: rgb(242, 231, 78); } "
+            }
+          </style>
           <h1>Гра закінчена!</h1>
         </>
       );
     } else return <h1>Балів: {points}</h1>;
   }
+
+  useEffect(() => {
+    if (deck.every((card) => card.status === "correct"))
+      return setSeconds(seconds);
+    let counter = setTimeout(() => {
+      setSeconds(seconds + 1);
+    }, 1000);
+    return () => clearTimeout(counter);
+  }, [seconds]);
 
   const cards = deck.map((card, index) => {
     return (
@@ -100,13 +115,17 @@ export default function Cards() {
       <div id="header">
         <Placeholder />
         <div id="gameInfo">
-          <div id="flips">Ходів: {flips}</div>
+          <div id="info">
+            <div id="flips">Ходів: {flips}</div>
+            <div id="time">Час: {seconds}</div>
+          </div>
           <button
             className="btnNewGame"
             onClick={() => {
               setDeck(shuffle(cardsArray));
               setFlips(0);
               setPoints(0);
+              setSeconds(0);
             }}
           >
             Нова гра
